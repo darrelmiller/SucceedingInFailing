@@ -88,8 +88,9 @@
     <Reference Include="Tavis.Problem">
       <HintPath>..\..\packages\Tavis.Problem.0.9.5-beta2\lib\portable-net45+sl5+wp8+win8+wpa81+MonoTouch1+MonoAndroid1\Tavis.Problem.dll</HintPath>
     </Reference>
-    <Reference Include="Tavis.UriTemplates">
-      <HintPath>..\..\packages\Tavis.UriTemplates.0.6.1\lib\Net45\Tavis.UriTemplates.dll</HintPath>
+    <Reference Include="Tavis.UriTemplates, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Tavis.UriTemplates.0.6.3\lib\Net45\Tavis.UriTemplates.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
