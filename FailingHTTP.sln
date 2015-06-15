@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FailingHTTP", "src\FailingHTTP\FailingHTTP.csproj", "{B45E88BC-0A62-41CD-A021-57861534DE99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FailingHTTPApi", "src\FailingHTTPApi\FailingHTTPApi.csproj", "{562278F7-D07F-4E2F-A3D4-E0367F16E9C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FailingHTTPConsole", "src\FailingHTTPConsole\FailingHTTPConsole.csproj", "{095BF517-FF91-4EA9-B022-73BD4C56AA50}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B45E88BC-0A62-41CD-A021-57861534DE99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B45E88BC-0A62-41CD-A021-57861534DE99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B45E88BC-0A62-41CD-A021-57861534DE99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B45E88BC-0A62-41CD-A021-57861534DE99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{562278F7-D07F-4E2F-A3D4-E0367F16E9C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{562278F7-D07F-4E2F-A3D4-E0367F16E9C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{562278F7-D07F-4E2F-A3D4-E0367F16E9C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{562278F7-D07F-4E2F-A3D4-E0367F16E9C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{095BF517-FF91-4EA9-B022-73BD4C56AA50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{095BF517-FF91-4EA9-B022-73BD4C56AA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{095BF517-FF91-4EA9-B022-73BD4C56AA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{095BF517-FF91-4EA9-B022-73BD4C56AA50}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
