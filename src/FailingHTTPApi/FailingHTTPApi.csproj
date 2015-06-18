@@ -94,15 +94,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ClientFailuresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NoteController.cs" />
     <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\ServerFailuresController.cs" />
+    <Compile Include="Tooling\MethodNotAllowedHandler.cs" />
+    <Compile Include="Tooling\DefaultMediaTypeHandler.cs" />
+    <Compile Include="Tooling\DosProtectionHandler.cs" />
     <Compile Include="NotesService.cs" />
-    <Compile Include="RequestMessageExtensions.cs" />
+    <Compile Include="Tooling\CheckAcceptAttribute.cs" />
+    <Compile Include="Tooling\ProblemFactory.cs" />
+    <Compile Include="Tooling\ProblemResult.cs" />
+    <Compile Include="Tooling\ProblemException.cs" />
+    <Compile Include="Tooling\RequestMessageExtensions.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestController.cs" />
     <Compile Include="WebApiConfig.cs" />
   </ItemGroup>
   <ItemGroup>

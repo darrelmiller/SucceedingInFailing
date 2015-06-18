@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
+using FailingHTTPApi.Tooling;
+using Tavis;
 
 namespace FailingHTTPApi.Controllers
 {
@@ -17,7 +19,9 @@ namespace FailingHTTPApi.Controllers
         public IHttpActionResult GetInternalServerError()
         {
             var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-            response.Headers.Add("incident-reference-id",Guid.NewGuid().ToString());
+            var incident =Guid.NewGuid().ToString();
+            response.Headers.Add("incident-reference-id",incident);
+            response.Content = new ProblemContent(ProblemFactory.CreateInternalServerErrorProblem(incident));
             return new ResponseMessageResult(response);
         }
 
@@ -27,21 +31,8 @@ namespace FailingHTTPApi.Controllers
         {
             var response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
             response.Headers.RetryAfter = new System.Net.Http.Headers.RetryConditionHeaderValue(new TimeSpan(0, 5, 0));
+            response.Content = new ProblemContent(ProblemFactory.CreateServiceUnavailableProblem());
             return new ResponseMessageResult(response);
         }
     }
-
-    public class ClientFailuresController : ApiController
-    {
-        [Route("ClientFail/429")]
-        [HttpGet()]
-        public IHttpActionResult GetInternalServerError()
-        {
-            var response = new HttpResponseMessage((HttpStatusCode)429);
-            response.Headers.RetryAfter = new System.Net.Http.Headers.RetryConditionHeaderValue(new TimeSpan(0, 1, 0));
-            return new ResponseMessageResult(response);
-        }
-    }
-
-
 }

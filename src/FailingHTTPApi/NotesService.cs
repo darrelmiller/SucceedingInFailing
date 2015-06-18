@@ -9,48 +9,68 @@ namespace FailingHTTPApi
 {
     public static class NotesService
     {
-        public static Collection<String> Notes { get; set; }
+        private static int _LastId = 0;
+        private static Dictionary<int,String> _Notes ;
 
         static NotesService()
         {
-            Notes = new Collection<string>
-            {
-                "Hello World", 
-                "Dear Mother, Dear Father", 
-                "Why so glum?",
+            _Notes = new Dictionary<int,string>();
 
-            };
+            AddNote("Hello World"); 
+            AddNote("Dear Mother, Dear Father"); 
+            AddNote("Why so glum?");
+            AddNote("*Javascript makes me sad?");
+            
         }
 
+        public static IEnumerable<string> Notes { get { return _Notes.Values; } }
         public static string GetNote(int id)
         {
-            if (id < 0 || id > Notes.Count) throw new ArgumentException();
+            if (!_Notes.ContainsKey(id)) throw new ArgumentException();
 
-            return Notes[id];
+            return _Notes[id];
         }
 
+        public static IEnumerable<string> SearchNotes(string query)
+        {
+            return _Notes.Values.Where(n => n.Contains(query) && !n.StartsWith("*"));
+        }
+        public static IEnumerable<string> SecretNotes()
+        {
+            return _Notes.Values.Where(n => n.StartsWith("*"));
+        }
         public static string GetLastNote()
         {
-            return Notes.LastOrDefault();
+            return _Notes.Values.LastOrDefault();
         }
         public static void AddNote(string newNote)
         {
-            Notes.Add(newNote);
+            _Notes[_LastId++] = newNote;
         }
 
         public static bool CheckNote(int id,string contains)
         {
-            return Notes[id].Contains(contains);
+            return _Notes[id].Contains(contains);
         }
 
         public static void LowerNote(int id)
         {
-            Notes[id] = Notes[id].ToLower();
+            _Notes[id] = _Notes[id].ToLower();
         }
 
         public static void DeleteNote(int id)
         {
-            Notes.Remove(Notes[id]);
+            _Notes.Remove(id);
+        }
+
+        public static bool NoteExists(int id)
+        {
+            return _Notes.ContainsKey(id);
+        }
+
+        public static void SetNotes(int id, string note)
+        {
+            _Notes[id] = note;
         }
     }
 }

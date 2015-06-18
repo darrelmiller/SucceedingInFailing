@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
+using FailingHTTPApi.Tooling;
+using Tavis;
 
 namespace FailingHTTPApi
 {
@@ -17,7 +17,8 @@ namespace FailingHTTPApi
             var queryParams = request.GetQueryNameValuePairs().Select(p => p.Key);
             if (!queryParams.SequenceEqual(expectedParameters))
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                var badParams = queryParams.Where(q => !expectedParameters.Contains(q)).ToArray();
+                throw new ProblemException( ProblemFactory.CreateQueryParameterNotFoundProblem(badParams));
             }
         }
 
@@ -29,10 +30,11 @@ namespace FailingHTTPApi
             var matches = produces.Where(p => mediatypes.Any(m => m == p));
             if (!matches.Any())
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
+                throw new ProblemException(ProblemFactory.CreateNotAcceptableProblem(produces));
             }
         }
 
+        
         public static void CheckAuthorization(this HttpRequestMessage request)
         {
             
@@ -40,12 +42,12 @@ namespace FailingHTTPApi
             {
                 var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.Unauthorized);
                 httpResponseMessage.Headers.WwwAuthenticate.Add(new System.Net.Http.Headers.AuthenticationHeaderValue("basic"));
+                httpResponseMessage.Content = new ProblemContent(ProblemFactory.CreateNotAuthorizedProblem());
                 throw new HttpResponseException(httpResponseMessage);
             }
             if (!IsAuthorized(request.Headers.Authorization))
             {
-                var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.Forbidden);
-                throw new HttpResponseException(httpResponseMessage);
+                throw new ProblemException(ProblemFactory.CreateForbiddenProblem("Credentials provided do not have sufficient permissions"));
             }
 
         }
@@ -55,27 +57,5 @@ namespace FailingHTTPApi
             // Dummy for now
             return false;
         }
-    }
-
-    public class CheckAcceptAttribute: ActionFilterAttribute
-    {
-        public string Produces { get; set; }
-        public override void OnActionExecuting(HttpActionContext actionContext)
-        {
-            var produces = Produces.Split(',').Select(s=> s.Trim()).ToArray();
-
-            var mediatypes = actionContext.Request.Headers.Accept.Select(h => h.MediaType);
-            if (!mediatypes.Any()) return; // Use default
-
-            var matches = produces.Where(p => mediatypes.Any(m => m == p));
-            if (!matches.Any())
-            {
-                actionContext.Response = new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    RequestMessage = actionContext.Request
-                };
-                
-            }
-        }  
     }
 }

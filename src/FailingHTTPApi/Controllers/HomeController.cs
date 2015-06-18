@@ -14,7 +14,7 @@ namespace FailingHTTPApi.Controllers
         [Route("")]
         public IHttpActionResult Get()
         {
-            Request.CheckAcceptHeader(new[] { "text/plain" });
+            Request.CheckAcceptHeader(new[] { "application/json-home" });
 
             
             var home = new HomeDocument();
@@ -34,7 +34,9 @@ namespace FailingHTTPApi.Controllers
                 Relation = "urn:tavis:note",
                 Template = new UriTemplate(GetHost() + "/Note/{id}")
             });
-            return new ResponseMessageResult(new HttpResponseMessage() { Content = new HomeContent(home) });            
+            var homeContent = new HomeContent(home);
+            homeContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json-home");
+            return new ResponseMessageResult(new HttpResponseMessage() { Content = homeContent });            
         }
 
         private string GetHost()
@@ -42,12 +44,12 @@ namespace FailingHTTPApi.Controllers
             return Request.RequestUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
         }
 
-        [Route("")]
-        public IHttpActionResult Head()
-        {
-            Request.CheckAcceptHeader(new[] { "text/plain" });
-            return new ResponseMessageResult(new HttpResponseMessage() );
-        }
+        //[Route("")]
+        //public IHttpActionResult Head()
+        //{
+        //    Request.CheckAcceptHeader(new[] { "text/plain" });
+        //    return new ResponseMessageResult(new HttpResponseMessage() );
+        //}
 
         [Route("")]
         public IHttpActionResult Options()
