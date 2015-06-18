@@ -1,7 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Results;
+using FailingHTTPApi.Tooling;
+using Tavis;
 
 namespace FailingHTTPApi.Controllers
 {
@@ -12,17 +15,20 @@ namespace FailingHTTPApi.Controllers
         [HttpGet()]
         public IHttpActionResult Get(int id)
         {
-            if (id < 0 || id >= NotesService.Notes.Count) throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            CheckId(id);
 
-            var note = NotesService.Notes[id];
+            var note = NotesService.GetNote(id);
             return new ResponseMessageResult(new HttpResponseMessage() {Content = new StringContent(note) });            
         }
+
 
         [Route("note/{id}")]
         [HttpPut()]
         public IHttpActionResult Put(int id, string note)
         {
-            NotesService.Notes[id] = note;
+            CheckId(id);
+
+            NotesService.SetNotes(id,note);
             return new ResponseMessageResult(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
@@ -31,7 +37,7 @@ namespace FailingHTTPApi.Controllers
         [HttpDelete()]
         public IHttpActionResult Put(int id)
         {
-            if (id >= NotesService.Notes.Count) throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            CheckId(id);
 
             NotesService.DeleteNote(id);
             return new ResponseMessageResult(new HttpResponseMessage(HttpStatusCode.OK));
@@ -41,8 +47,26 @@ namespace FailingHTTPApi.Controllers
         [HttpGet()]
         public IHttpActionResult GetLatest(int id)
         {
-            var note = NotesService.Notes[id];
+            CheckId(id);
+
+            var note = NotesService.GetNote(id);
             return new ResponseMessageResult(new HttpResponseMessage() { Content = new StringContent(note) });
         }
+
+
+        private void CheckId(int id)
+        {
+            if (!NotesService.NoteExists(id))
+            {
+                var problemContent = new ProblemContent(ProblemFactory.CreateNoteNotFoundProblem(id));
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = problemContent
+                });
+            }
+
+        }
+
+
     }
 }
